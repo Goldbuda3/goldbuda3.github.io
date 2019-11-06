@@ -19,9 +19,18 @@ document.addEventListener('DOMContentLoaded', function() {
     return movieHTML.join('');
   }
 
-  var content = document.getElementById('movies-container');
-  content.innerHTML = renderMovies(movieData);
-  
+  document.getElementById("search-form").addEventListener("submit", function(event){
+    event.preventDefault();
+
+    var searchString = document.getElementById('search-bar').value
+    var urlEncodedSearchString = encodeURIComponent(searchString);
+
+    axios.get('https://www.omdbapi.com/?apikey=3430a78&s=' + urlEncodedSearchString).then(function(response){
+      console.log(response.data.Search)
+      let content = document.getElementById('movies-container')
+      content.innerHTML = renderMovies(response.data.Search)
+    });
+  })
 });
 
 
