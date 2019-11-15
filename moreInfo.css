@@ -58,7 +58,9 @@ body {
   padding: 20px;
 }
 .container {
-	margin-right: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content:space-around;
 }
 .container-card {
 	margin: 20px;
@@ -104,4 +106,31 @@ body {
 }
 #showMoreGames {
   margin: 20px;
+}
+.consoleButtons{
+  display: flex;
+}
+.consoleButtons p{
+  margin:10px ;
+}
+.ui-datepicker-current, .ui-datepicker-next, .ui-datepicker-prev { 
+  display: none; 
+}
+.ui-datepicker {
+background: #949494;
+display: flex;
+padding: 10px;
+}
+.ui-datepicker-year{
+  margin-right: 5px;
+}
+#datepicker {
+  width: 198.25px;
+}
+.videos {
+  background-color: #202020;
+}
+
+.btn-primary {
+  background-color:#FF1E01;
 }

@@ -84,11 +84,7 @@ $(document).ready(function () {
                 $(this).datepicker('setDate', new Date(iYear, iMonth, 1));
             }
         }
-        //Hides the unnecessary Prev and Next buttons
-    }).focus(function () {
-        $(".ui-datepicker-next").hide();
-        $(".ui-datepicker-prev").hide();
-    });
+    })
     //Creates the accordion function
     $("#accordion").accordion({
         heightStyle: "content",
