@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Group Project</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+        integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
+    <script src="homepage.js"></script>
+    <link rel="stylesheet" type="text/css" href="about.css" />
+
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">Game Catalog</a>
+            <div class="btn-group">
+                    <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                   Menu
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right">
+                      <button class="dropdown-item" type="button"><a href="index.html">Home</a></button>
+                      <button class="dropdown-item" type="button"><a href="about.html">About</a></button>
+                    </div>
+                  </div>
+        </div>
+    </nav>
+    <div class="container">
+        <header class="jumbotron my-4">
+            <h1 class="display-3">Game Catalog</h1>
+            <br>
+            <p class="lead">A web application to search and review the top reviewed games for the 4 Major Consoles.
+                <ul>
+                    <li> JavaScript Library: jQuery UI (Accordian and Date Picker)</li>
+                    <li>CSS Framework: Bootstrap</li>
+                    <li>APIs accessed using AJAX: Giant Bomb and YouTube</li>
+                </ul>
+            </p>
+        </header>
+        <div class="card-deck justify-content-around">
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <img src="images/johnm.jpeg" alt="" class="rounded-top">
+                        <div class="card-footer">John Melegrito</div>
+                    </div>
+                    <div class="flip-card-back">
+                        <div class="card-body">
+                            <h4 class="card-title">John Melegrito</h4>
+                            <p class="card-text">Knowledge Coordinator at LDARtools</p>
+                            <a href="https://www.linkedin.com/in/john-melegrito-96abb971/" class="btn btn-light"><img
+                                    src="https://content.linkedin.com/content/dam/me/business/en-us/amp/brand-site/v2/bg/LI-Bug.svg.original.svg"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <img src="images/tannera.jpeg" alt="" class="rounded-top">
+                        <div class="card-footer">Tanner Alsup</div>
+                    </div>
+                    <div class="flip-card-back">
+                        <div class="card-body">
+                            <h4 class="card-title">Tanner Alsup</h4>
+                            <p class="card-text">Automotive Service Advisor at Westside Lexus</p>
+                            <a href="https://www.linkedin.com/in/tanner-alsup-7245b5193/" class="btn btn-light"><img
+                                    src="https://content.linkedin.com/content/dam/me/business/en-us/amp/brand-site/v2/bg/LI-Bug.svg.original.svg"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <img src="images/joaquinv.jpeg" alt="" class="rounded-top">
+                        <div class="card-footer">Joaquin Vargas</div>
+                    </div>
+                    <div class="flip-card-back">
+                        <div class="card-body">
+                            <h4 class="card-title">Joaquin Vargas</h4>
+                            <p class="card-text">Retail Inventory Specialist at Houston Rockets</p>
+                            <a href="https://www.linkedin.com/in/joaquin-vargas-7312656a/" class="btn btn-light"><img
+                                    src="https://content.linkedin.com/content/dam/me/business/en-us/amp/brand-site/v2/bg/LI-Bug.svg.original.svg"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="py-3 bg-dark fixed bottom">
+        <div class="container">
+            <p class="m-0 text-center text-white">Copyright &copy; Game Catalog 2019</p>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+</html>
