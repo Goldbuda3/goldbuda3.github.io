@@ -27,7 +27,7 @@ $(document).ready(function () {
                 dataType: 'jsonp',
                 crossDomain: true,
                 jsonp: 'json_callback',
-                url: `http://www.giantbomb.com/api/games/?format=jsonp&api_key=ef77360c75de1c722453c99cebf0f44843f09d27&filter=platforms:${info},expected_release_year:${yr},expected_release_month:${gameMonth + 1}`,
+                url: `https://www.giantbomb.com/api/games/?format=jsonp&api_key=ef77360c75de1c722453c99cebf0f44843f09d27&filter=platforms:${info},expected_release_year:${yr},expected_release_month:${gameMonth + 1}`,
                 complete: function () {
                     console.log('done');
                     $("#gameHeader").text(
