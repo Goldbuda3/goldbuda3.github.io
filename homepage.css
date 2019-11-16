@@ -128,3 +128,6 @@ body {
   background-size: cover;
   background-position: center;
 }
+.list-group {
+  text-align: center;
+}
