@@ -86,7 +86,7 @@ body {
   text-overflow: ellipsis;
 }
 .gamePicker {
-  margin: 20px;
+  margin: 30px;
   display: flex;
   justify-content: space-around;
 }
@@ -117,11 +117,10 @@ body {
   display: none; 
 }
 .ui-datepicker {
-background: #949494;
 display: flex;
 padding: 10px;
 }
-.ui-datepicker-year{
+.ui-datepicker-year,.ui-datepicker-month {
   margin-right: 5px;
 }
 #datepicker {
@@ -133,4 +132,15 @@ padding: 10px;
 
 .btn-primary {
   background-color:#FF1E01;
+}
+button:disabled {
+  background-color: #202020;
+  color: #949494;
+}
+#accordion{
+  margin-bottom: 50px;
+}
+.pageInstructions {
+  margin-left: 20px;
+  padding-top: 10px;
 }

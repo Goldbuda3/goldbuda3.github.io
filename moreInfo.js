@@ -1,8 +1,38 @@
 //Use value from index.html then continue using values from buttons. IDs are as follows: PS4 ID = 146, XBOX One ID = 145, PC ID = 94, Switch ID = 157
 var info = localStorage.getItem("console")
+//calls the keepSelected function to indicate what console was selected from index.html
+keepSelected();
 function idGrabber(id){
     info = id;
+    keepSelected();
     return info;
+}
+//Function to keep button selected and disabled with accompanying CSS class button:disabled to style selected button. This allows the user to identify what console is currently selected.
+function keepSelected(){
+    if (info == 146) {
+        $("#PS4button").prop('disabled', true)
+        $("#XBOXbutton").prop('disabled', false)
+        $("#Switchbutton").prop('disabled', false)
+        $("#PCbutton").prop('disabled', false)
+    }
+    if (info == 145) {
+        $("#PS4button").prop('disabled', false)
+        $("#XBOXbutton").prop('disabled', true)
+        $("#Switchbutton").prop('disabled', false)
+        $("#PCbutton").prop('disabled', false)
+    }
+    if (info == 157) {
+        $("#PS4button").prop('disabled', false)
+        $("#XBOXbutton").prop('disabled', false)
+        $("#Switchbutton").prop('disabled', true)
+        $("#PCbutton").prop('disabled', false)
+    }
+    if (info == 94) {
+        $("#PS4button").prop('disabled', false)
+        $("#XBOXbutton").prop('disabled', false)
+        $("#Switchbutton").prop('disabled', false)
+        $("#PCbutton").prop('disabled', true)
+    };
 }
 //Grabbing Giant Bomb API data based on platform and MM/YYYY
 $(document).ready(function () {
@@ -72,8 +102,19 @@ $(document).ready(function () {
                         return gameHTML;
                     };
                     $(".container-card").html(renderGames(arr));
+                    
+                        $("#gameHeader").show();
+                        $("#vidHeader").hide();
+                        toggler = true;
+                        $("#vidHeader").removeClass("ui-accordion-header-active ui-state-active").addClass("ui-accordion-header-collapsed ui-corner-all");
+                        $("#gameHeader").removeClass("ui-accordion-header-collapsed ui-corner-all").addClass("ui-accordion-header-active ui-state-active");
+                        $("#vids").removeClass("ui-accordion-content-active").css("display", "none");
+                        $("#cards").addClass("ui-accordion-content-active").removeAttr("style");
+                        return toggler;
                 }
+                
             });
+            
         },
         //Making sure that the datepicker value selected will remain
         beforeShow: function () {
