@@ -188,11 +188,11 @@ h6,
   display: inline-block;
   border: 1px solid #000;
   padding: 10px 15px;
-  font-size: 12px;
+  font-size: 60px;
   text-transform: uppercase;
   color: #000;
   transition: .2s all ease;
-  font-weight: 700;
+  /* font-weight: 700; */
 }
 
 .readmore:active,
