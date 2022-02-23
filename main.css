@@ -1,0 +1,32 @@
+.w100-hauto {
+    width: 100%;
+    height: auto;
+  }
+
+.shadow1{
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,.75);
+}
+
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,.75);
+}
+
+.bg-sand{
+background-color: beige;
+}
+
+.snapper {
+  background: #af2654;
+}
+
+.seagrass {
+  background: #a6be47;
+}
+
+.starfish {
+  background: #ff9d04;
+}
+
+.laguna {
+  background: #00bccd; ;
+}
