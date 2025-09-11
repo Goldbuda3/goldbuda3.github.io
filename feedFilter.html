@@ -1,163 +1,1142 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Hybrid CSV Extractor</title>
-  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
-  <style>
-    body {
-      font-family: system-ui, sans-serif;
-      margin: 2rem;
-      background: #f9f9f9;
-      color: #333;
-    }
-    h1 {
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
-    }
-    .section {
-      margin-bottom: 2rem;
-    }
-    #presetHeaderForm {
-      max-height: 300px;
-      overflow-y: auto;
-      border: 1px solid #ccc;
-      padding: 1rem;
-      background: #fff;
-    }
-    #presetHeaderForm label {
-      display: block;
-      margin: 0.25rem 0;
-    }
-    #errorMsg {
-      color: red;
-      margin-top: 1rem;
-    }
-    #exportBtn {
-      margin-top: 1rem;
-      padding: 0.5rem 1rem;
-      background: #0078d4;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    #exportBtn:hover {
-      background: #005ea2;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV/TSV Converter</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #c41e3a 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 1000px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            color: #1e3c72;
+            margin-bottom: 10px;
+            font-size: 2em;
+            background: linear-gradient(135deg, #1e3c72, #c41e3a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 0.9em;
+        }
+
+        .upload-area {
+            border: 3px dashed #2a5298;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: rgba(42, 82, 152, 0.05);
+        }
+
+        .upload-area:hover {
+            border-color: #c41e3a;
+            background: rgba(196, 30, 58, 0.05);
+            transform: scale(1.02);
+        }
+
+        .upload-area.dragover {
+            border-color: #c41e3a;
+            background: rgba(196, 30, 58, 0.1);
+            transform: scale(1.05);
+        }
+
+        .upload-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .file-info {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(42, 82, 152, 0.1);
+            border-radius: 10px;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 5px 0;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #1e3c72;
+        }
+
+        .info-value {
+            color: #333;
+        }
+
+        .export-name-section {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            border: 2px solid rgba(42, 82, 152, 0.2);
+            display: none;
+        }
+
+        .export-name-label {
+            display: block;
+            font-weight: 600;
+            color: #1e3c72;
+            margin-bottom: 10px;
+        }
+
+        .export-name-input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 2px solid #2a5298;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .export-name-input:focus {
+            outline: none;
+            border-color: #c41e3a;
+            box-shadow: 0 0 0 3px rgba(196, 30, 58, 0.1);
+        }
+
+        .preview-section {
+            margin-top: 30px;
+            display: none;
+        }
+
+        .preview-title {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            color: #1e3c72;
+        }
+
+        .preview-table {
+            width: 100%;
+            overflow-x: auto;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:hover {
+            background: rgba(42, 82, 152, 0.05);
+        }
+
+        .column-selector {
+            margin-top: 30px;
+            display: none;
+        }
+
+        .preset-section {
+            margin-bottom: 20px;
+            padding: 20px;
+            background: rgba(196, 30, 58, 0.05);
+            border-radius: 10px;
+            border: 2px solid rgba(196, 30, 58, 0.2);
+        }
+
+        .preset-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .preset-title {
+            font-weight: 600;
+            color: #c41e3a;
+        }
+
+        .save-preset-btn {
+            padding: 8px 15px;
+            background: #c41e3a;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .save-preset-btn:hover {
+            background: #a01729;
+            transform: translateY(-2px);
+        }
+
+        .preset-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .preset-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            transition: all 0.3s ease;
+        }
+
+        .preset-item:hover {
+            border-color: #2a5298;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .preset-name {
+            flex: 1;
+            font-weight: 500;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .preset-name:hover {
+            color: #2a5298;
+        }
+
+        .preset-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .preset-btn {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+        }
+
+        .preset-apply {
+            background: #2a5298;
+            color: white;
+        }
+
+        .preset-apply:hover {
+            background: #1e3c72;
+        }
+
+        .preset-edit {
+            background: #f39c12;
+            color: white;
+        }
+
+        .preset-edit:hover {
+            background: #e67e22;
+        }
+
+        .preset-delete {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .preset-delete:hover {
+            background: #c0392b;
+        }
+
+        .columns-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .column-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .column-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            border-color: #2a5298;
+        }
+
+        .column-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            cursor: pointer;
+            accent-color: #c41e3a;
+        }
+
+        .column-item label {
+            cursor: pointer;
+            flex: 1;
+            color: #444;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #c41e3a, #e74c3c);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(196, 30, 58, 0.3);
+        }
+
+        .btn-secondary {
+            background: #2a5298;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #1e3c72;
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: #f0f0f0;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #1e3c72, #c41e3a);
+            width: 0;
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .status-message {
+            text-align: center;
+            margin-top: 15px;
+            color: #2a5298;
+            font-style: italic;
+            display: none;
+        }
+
+        .error-message {
+            color: #c41e3a;
+            background: rgba(196, 30, 58, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .select-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .select-btn {
+            padding: 8px 15px;
+            border: 1px solid #2a5298;
+            background: white;
+            color: #2a5298;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .select-btn:hover {
+            background: #2a5298;
+            color: white;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            position: relative;
+            background: white;
+            margin: 10% auto;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 15px;
+            animation: slideIn 0.3s ease;
+        }
+
+        .modal-header {
+            font-size: 1.3em;
+            color: #1e3c72;
+            margin-bottom: 20px;
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #2a5298;
+            border-radius: 8px;
+            font-size: 1em;
+            margin-bottom: 20px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .modal-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .modal-save {
+            background: #2a5298;
+            color: white;
+        }
+
+        .modal-save:hover {
+            background: #1e3c72;
+        }
+
+        .modal-cancel {
+            background: #e0e0e0;
+            color: #555;
+        }
+
+        .modal-cancel:hover {
+            background: #d0d0d0;
+        }
+
+        .no-presets {
+            text-align: center;
+            color: #999;
+            padding: 20px;
+            font-style: italic;
+        }
+    </style>
 </head>
 <body>
-  <h1>Hybrid CSV Extractor</h1>
+    <div class="container">
+        <h1>CSV/TSV File Converter</h1>
+        <p class="subtitle">Upload files up to 700 MB • Select specific columns • Export as CSV</p>
+        
+        <div class="upload-area" id="uploadArea">
+            <div class="upload-icon">📁</div>
+            <p style="font-size: 1.2em; margin-bottom: 10px;">Drop your file here or click to browse</p>
+            <p style="color: #888; font-size: 0.9em;">Supports .csv and .tsv files</p>
+            <input type="file" id="fileInput" accept=".csv,.tsv,.txt">
+        </div>
 
-  <div class="section">
-    <label for="csvUpload">Upload CSV:</label>
-    <input type="file" id="csvUpload" accept=".csv,.tsv" />
-    <div id="errorMsg"></div>
-  </div>
+        <div class="file-info" id="fileInfo">
+            <div class="info-row">
+                <span class="info-label">File Name:</span>
+                <span class="info-value" id="fileName"></span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">File Size:</span>
+                <span class="info-value" id="fileSize"></span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">File Type:</span>
+                <span class="info-value" id="fileType"></span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Detected Delimiter:</span>
+                <span class="info-value" id="delimiter"></span>
+            </div>
+        </div>
 
-  <div class="section">
-    <!-- <label><input type="checkbox" id="selectAllToggle" checked /> Select All</label> -->
-    <strong>Quick Select:</strong>
-    <button type="button" onclick="selectGroup('essentials')">Essentials</button>
-    <!-- <button type="button" onclick="selectGroup('inventory')">Inventory</button> -->
-    <!-- <button type="button" onclick="selectGroup('marketing')">Marketing</button> -->
-    <button type="button" onclick="selectGroup('all')">All Headers</button>
-    <button type="button" onclick="clearSelection()">Clear All</button>
-    <form id="presetHeaderForm"></form>
-    <button id="exportBtn">Export Filtered CSV</button>
-  </div>
+        <div class="export-name-section" id="exportNameSection">
+            <label class="export-name-label" for="exportNameInput">Export File Name:</label>
+            <input type="text" id="exportNameInput" class="export-name-input" placeholder="Enter custom filename (without .csv extension)">
+        </div>
 
-  <script>
-    const headers = [
-      "product_id", "sku_id", "item_group_id", "id", "upc", "mpn", "title", "description",
-      "product_type_old", "product_type", "Division", "Department", "Class", "Sub-Class",
-      "rms_division", "rms_dept", "rms_class", "rms_subclass", "rms_product_type", "link",
-      "child_link", "image_link", "brand", "price", "sale_price", "availability", "color",
-      "industry_sub_group", "gender", "size", "material", "age_group", "availability_date",
-      "map_price", "bopis_flag", "shiptostore_flag", "ref_src", "shipping_weight", "shipping",
-      "stock_description", "ecom_code", "quantity", "rating", "review_count", "badge",
-      "map_price_flag", "cmc_category_name_L1", "cmc_category_name_L2", "cmc_category_name_L3",
-      "cmc_category_name_L4", "cmc_category_name_L5", "cmc_category_name_L6", "Team", "Caliber", "pattern"
-    ];
+        <div class="preview-section" id="previewSection">
+            <h2 class="preview-title">Preview (First 5 Rows)</h2>
+            <div class="preview-table">
+                <table id="previewTable"></table>
+            </div>
+        </div>
 
-    const headerGroups = {
-      essentials: ["item_group_id", "title", "rms_division", "rms_dept", "rms_class", "rms_subclass"],
-      inventory: ["sku_id", "quantity", "shipping_weight"],
-      marketing: ["brand", "color", "gender", "badge", "rating"],
-      all: [...headers]
-    };
+        <div class="column-selector" id="columnSelector">
+            <h2 class="preview-title">Select Columns to Export</h2>
+            
+            <div class="preset-section">
+                <div class="preset-header">
+                    <span class="preset-title">Header Presets</span>
+                    <button class="save-preset-btn" onclick="openSavePresetModal()">Save Current Selection</button>
+                </div>
+                <div class="preset-list" id="presetList">
+                    <div class="no-presets">No saved presets yet</div>
+                </div>
+            </div>
 
-    let originalFile = null;
+            <div class="select-controls">
+                <button class="select-btn" onclick="selectAll()">Select All</button>
+                <button class="select-btn" onclick="deselectAll()">Deselect All</button>
+            </div>
+            <div class="columns-grid" id="columnsGrid"></div>
+        </div>
 
-    function showError(msg) {
-      document.getElementById('errorMsg').textContent = msg;
-    }
+        <div class="button-group" id="actionButtons" style="display: none;">
+            <button class="btn btn-secondary" onclick="resetFile()">Reset</button>
+            <button class="btn btn-primary" id="exportBtn" onclick="exportFile()">Export as CSV</button>
+        </div>
 
-    function selectGroup(groupName) {
-      const groupHeaders = headerGroups[groupName];
-      document.querySelectorAll('#presetHeaderForm input[type="checkbox"]').forEach(cb => {
-        cb.checked = groupHeaders.includes(cb.value);
-      });
-    }
+        <div class="progress-bar" id="progressBar">
+            <div class="progress-fill" id="progressFill">0%</div>
+        </div>
 
-    function clearSelection() {
-      document.querySelectorAll('#presetHeaderForm input[type="checkbox"]').forEach(cb => {
-        cb.checked = false;
-      });
-    }
+        <div class="status-message" id="statusMessage"></div>
+        <div class="error-message" id="errorMessage"></div>
+    </div>
 
-    // Render header checkboxes
-    const form = document.getElementById('presetHeaderForm');
-    form.innerHTML = headers.map(h => `
-      <label><input type="checkbox" value="${h}" checked /> ${h}</label>
-    `).join('');
+    <!-- Modal for saving/editing presets -->
+    <div id="presetModal" class="modal">
+        <div class="modal-content">
+            <h2 class="modal-header" id="modalHeader">Save Preset</h2>
+            <input type="text" id="presetNameInput" class="modal-input" placeholder="Enter preset name">
+            <div class="modal-buttons">
+                <button class="modal-btn modal-cancel" onclick="closePresetModal()">Cancel</button>
+                <button class="modal-btn modal-save" onclick="savePreset()">Save</button>
+            </div>
+        </div>
+    </div>
 
-    // Select All toggle
-    // document.getElementById('selectAllToggle').addEventListener('change', (e) => {
-    //   const isChecked = e.target.checked;
-    //   document.querySelectorAll('#presetHeaderForm input[type="checkbox"]').forEach(cb => cb.checked = isChecked);
-    // });
-
-    // File upload
-    document.getElementById('csvUpload').addEventListener('change', (e) => {
-      originalFile = e.target.files[0];
-      showError('');
-    });
-
-    // Export logic
-    document.getElementById('exportBtn').addEventListener('click', () => {
-      if (!originalFile) {
-        showError('Please upload a CSV file first.');
-        return;
-      }
-
-      const selectedHeaders = Array.from(document.querySelectorAll('#presetHeaderForm input:checked'))
-        .map(input => input.value);
-
-      if (selectedHeaders.length === 0) {
-        showError('Please select at least one column.');
-        return;
-      }
-
-      const worker = new Worker('worker.js');
-            worker.postMessage({ file: originalFile, headers: selectedHeaders });
-
-            worker.onmessage = (e) => {
-                const csv = e.data;
-                const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(blob);
-                const originalName = originalFile.name.replace(/\.[^/.]+$/, '');
-                const suffix = '_filtered';
-                const extension = '.csv';
-                link.download = originalName + suffix + extension;
-
-                link.click();
-                worker.terminate();
+    <script>
+        let currentFile = null;
+        let headers = [];
+        let delimiter = ',';
+        let fileData = [];
+        let presets = [];
+        let editingPresetIndex = null;
+        
+        // Initialize everything when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load presets from localStorage
+            loadPresets();
+            
+            const uploadArea = document.getElementById('uploadArea');
+            const fileInput = document.getElementById('fileInput');
+            
+            // Click to browse
+            uploadArea.onclick = function(e) {
+                e.stopPropagation();
+                fileInput.click();
             };
-    });
-  </script>
-</body>
-</html>
-
+            
+            // Prevent default drag behaviors
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, preventDefaults, false);
+                document.body.addEventListener(eventName, preventDefaults, false);
+            });
+            
+            // Highlight drop area when item is dragged over it
+            ['dragenter', 'dragover'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, highlight, false);
+            });
+            
+            ['dragleave', 'drop'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, unhighlight, false);
+            });
+            
+            // Handle dropped files
+            uploadArea.addEventListener('drop', handleDrop, false);
+            
+            // Handle file input change
+            fileInput.addEventListener('change', function(e) {
+                if (e.target.files && e.target.files.length > 0) {
+                    handleFile(e.target.files[0]);
+                }
+            });
+        });
+        
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        
+        function highlight(e) {
+            document.getElementById('uploadArea').classList.add('dragover');
+        }
+        
+        function unhighlight(e) {
+            document.getElementById('uploadArea').classList.remove('dragover');
+        }
+        
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            
+            if (files && files.length > 0) {
+                handleFile(files[0]);
+            }
+        }
+        
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+        }
+        
+        function detectDelimiter(text) {
+            const firstLine = text.split('\n')[0];
+            const commaCount = (firstLine.match(/,/g) || []).length;
+            const tabCount = (firstLine.match(/\t/g) || []).length;
+            return tabCount > commaCount ? '\t' : ',';
+        }
+        
+        function parseCSVLine(line, delimiter) {
+            const result = [];
+            let current = '';
+            let inQuotes = false;
+            
+            for (let i = 0; i < line.length; i++) {
+                const char = line[i];
+                const nextChar = line[i + 1];
+                
+                if (char === '"') {
+                    if (inQuotes && nextChar === '"') {
+                        current += '"';
+                        i++;
+                    } else {
+                        inQuotes = !inQuotes;
+                    }
+                } else if (char === delimiter && !inQuotes) {
+                    result.push(current);
+                    current = '';
+                } else {
+                    current += char;
+                }
+            }
+            result.push(current);
+            
+            return result;
+        }
+        
+        async function handleFile(file) {
+            currentFile = file;
+            
+            // Check file size
+            if (file.size > 700 * 1024 * 1024) {
+                showError('File size exceeds 700 MB limit');
+                return;
+            }
+            
+            // Show file info
+            document.getElementById('fileName').textContent = file.name;
+            document.getElementById('fileSize').textContent = formatFileSize(file.size);
+            document.getElementById('fileType').textContent = file.name.endsWith('.tsv') ? 'TSV' : 'CSV';
+            document.getElementById('fileInfo').style.display = 'block';
+            
+            // Set default export name
+            const defaultName = file.name.replace(/\.(csv|tsv)$/i, '') + '_converted';
+            document.getElementById('exportNameInput').value = defaultName;
+            document.getElementById('exportNameSection').style.display = 'block';
+            
+            showStatus('Reading file...');
+            
+            try {
+                // Read first chunk for preview
+                const chunkSize = 1024 * 1024; // 1MB chunk for preview
+                const chunk = file.slice(0, Math.min(chunkSize, file.size));
+                const text = await chunk.text();
+                
+                // Detect delimiter
+                delimiter = detectDelimiter(text);
+                document.getElementById('delimiter').textContent = delimiter === '\t' ? 'Tab' : 'Comma';
+                
+                // Parse preview data
+                const lines = text.split('\n').filter(line => line.trim());
+                headers = parseCSVLine(lines[0], delimiter);
+                
+                // Show preview table
+                const previewTable = document.getElementById('previewTable');
+                previewTable.innerHTML = '';
+                
+                // Add headers
+                const headerRow = document.createElement('tr');
+                headers.forEach(header => {
+                    const th = document.createElement('th');
+                    th.textContent = header;
+                    headerRow.appendChild(th);
+                });
+                previewTable.appendChild(headerRow);
+                
+                // Add data rows (max 5)
+                for (let i = 1; i < Math.min(6, lines.length); i++) {
+                    const row = document.createElement('tr');
+                    const values = parseCSVLine(lines[i], delimiter);
+                    values.forEach(value => {
+                        const td = document.createElement('td');
+                        td.textContent = value.length > 50 ? value.substring(0, 50) + '...' : value;
+                        row.appendChild(td);
+                    });
+                    previewTable.appendChild(row);
+                }
+                
+                document.getElementById('previewSection').style.display = 'block';
+                
+                // Create column selector
+                const columnsGrid = document.getElementById('columnsGrid');
+                columnsGrid.innerHTML = '';
+                
+                headers.forEach((header, index) => {
+                    const columnItem = document.createElement('div');
+                    columnItem.className = 'column-item';
+                    columnItem.innerHTML = `
+                        <input type="checkbox" id="col_${index}" checked>
+                        <label for="col_${index}">${header}</label>
+                    `;
+                    columnsGrid.appendChild(columnItem);
+                });
+                
+                document.getElementById('columnSelector').style.display = 'block';
+                document.getElementById('actionButtons').style.display = 'flex';
+                
+                // Display presets
+                displayPresets();
+                
+                hideStatus();
+                hideError();
+                
+            } catch (error) {
+                showError('Error reading file: ' + error.message);
+            }
+        }
+        
+        function selectAll() {
+            document.querySelectorAll('#columnsGrid input[type="checkbox"]').forEach(cb => {
+                cb.checked = true;
+            });
+        }
+        
+        function deselectAll() {
+            document.querySelectorAll('#columnsGrid input[type="checkbox"]').forEach(cb => {
+                cb.checked = false;
+            });
+        }
+        
+        function loadPresets() {
+            const saved = localStorage.getItem('csvConverterPresets');
+            if (saved) {
+                try {
+                    presets = JSON.parse(saved);
+                } catch (e) {
+                    presets = [];
+                }
+            }
+        }
+        
+        function savePresetsToStorage() {
+            localStorage.setItem('csvConverterPresets', JSON.stringify(presets));
+        }
+        
+        function displayPresets() {
+            const presetList = document.getElementById('presetList');
+            
+            if (presets.length === 0) {
+                presetList.innerHTML = '<div class="no-presets">No saved presets yet</div>';
+                return;
+            }
+            
+            presetList.innerHTML = '';
+            
+            presets.forEach((preset, index) => {
+                const presetItem = document.createElement('div');
+                presetItem.className = 'preset-item';
+                presetItem.innerHTML = `
+                    <span class="preset-name" title="${preset.headers.join(', ')}">${preset.name}</span>
+                    <div class="preset-actions">
+                        <button class="preset-btn preset-apply" onclick="applyPreset(${index})">Apply</button>
+                        <button class="preset-btn preset-edit" onclick="editPreset(${index})">Edit</button>
+                        <button class="preset-btn preset-delete" onclick="deletePreset(${index})">Delete</button>
+                    </div>
+                `;
+                presetList.appendChild(presetItem);
+            });
+        }
+        
+        function openSavePresetModal() {
+            const selectedHeaders = [];
+            document.querySelectorAll('#columnsGrid input[type="checkbox"]').forEach((cb, index) => {
+                if (cb.checked) {
+                    selectedHeaders.push(headers[index]);
+                }
+            });
+            
+            if (selectedHeaders.length === 0) {
+                showError('Please select at least one column to save as preset');
+                return;
+            }
+            
+            document.getElementById('modalHeader').textContent = 'Save Preset';
+            document.getElementById('presetNameInput').value = '';
+            editingPresetIndex = null;
+            document.getElementById('presetModal').style.display = 'block';
+        }
+        
+        function editPreset(index) {
+            const preset = presets[index];
+            document.getElementById('modalHeader').textContent = 'Edit Preset';
+            document.getElementById('presetNameInput').value = preset.name;
+            editingPresetIndex = index;
+            
+            // Apply the preset selection first
+            applyPreset(index);
+            
+            document.getElementById('presetModal').style.display = 'block';
+        }
+        
+        function closePresetModal() {
+            document.getElementById('presetModal').style.display = 'none';
+            editingPresetIndex = null;
+        }
+        
+        function savePreset() {
+            const name = document.getElementById('presetNameInput').value.trim();
+            
+            if (!name) {
+                alert('Please enter a preset name');
+                return;
+            }
+            
+            const selectedHeaders = [];
+            document.querySelectorAll('#columnsGrid input[type="checkbox"]').forEach((cb, index) => {
+                if (cb.checked) {
+                    selectedHeaders.push(headers[index]);
+                }
+            });
+            
+            if (editingPresetIndex !== null) {
+                // Edit existing preset
+                presets[editingPresetIndex] = { name, headers: selectedHeaders };
+            } else {
+                // Add new preset
+                presets.push({ name, headers: selectedHeaders });
+            }
+            
+            savePresetsToStorage();
+            displayPresets();
+            closePresetModal();
+            showStatus('Preset saved successfully!');
+            setTimeout(hideStatus, 2000);
+        }
+        
+        function applyPreset(index) {
+            const preset = presets[index];
+            
+            // First, deselect all
+            document.querySelectorAll('#columnsGrid input[type="checkbox"]').forEach(cb => {
+                cb.checked = false;
+            });
+            
+            // Then select matching headers
+            preset.headers.forEach(presetHeader => {
+                headers.forEach((header, headerIndex) => {
+                    if (header === presetHeader) {
+                        const checkbox = document.getElementById(`col_${headerIndex}`);
+                        if (checkbox) {
+                            checkbox.checked = true;
+                        }
+                    }
+                });
+            });
+            
+            showStatus(`Applied preset: ${preset.name}`);
+            setTimeout(hideStatus, 2000);
+        }
+        
+        function deletePreset(index) {
+            if (confirm(`Are you sure you want to delete the preset "${presets[index].name}"?`)) {
+                presets.splice(index, 1);
+                savePresetsToStorage();
+                displayPresets();
+                showStatus('Preset deleted');
+                setTimeout(hideStatus, 2000);
+            }
+        }
+        
+        async function exportFile() {
+            const selectedColumns = [];
+            document.querySelectorAll('#columnsGrid input[type="checkbox"]').forEach((cb, index) => {
+                if (cb.checked) {
+                    selectedColumns.push(index);
+                }
+            });
+            
+            if (selectedColumns.length === 0) {
+                showError('Please select at least one column');
+                return;
+            }
+            
+            // Get custom filename
+            let exportFileName = document.getElementById('exportNameInput').value.trim();
+            if (!exportFileName) {
+                exportFileName = currentFile.name.replace(/\.(csv|tsv)$/i, '') + '_converted';
+            }
+            // Ensure .csv extension
+            if (!exportFileName.endsWith('.csv')) {
+                exportFileName += '.csv';
+            }
+            
+            showProgress(0);
+            showStatus('Processing file...');
+            document.getElementById('exportBtn').disabled = true;
+            
+            try {
+                const CHUNK_SIZE = 10 * 1024 * 1024; // 10MB chunks
+                let offset = 0;
+                let outputParts = [];
+                let partialLine = '';
+                let isFirstChunk = true;
+                
+                // Add selected headers
+                const selectedHeaders = selectedColumns.map(i => headers[i]);
+                outputParts.push(formatCSVLine(selectedHeaders) + '\n');
+                
+                while (offset < currentFile.size) {
+                    const chunk = currentFile.slice(offset, offset + CHUNK_SIZE);
+                    const text = await chunk.text();
+                    
+                    // Combine with partial line from previous chunk
+                    const fullText = partialLine + text;
+                    const lines = fullText.split('\n');
+                    
+                    // Save last partial line for next chunk
+                    partialLine = lines[lines.length - 1];
+                    
+                    // Process complete lines
+                    const completeLines = lines.slice(0, -1);
+                    
+                    for (let i = (isFirstChunk ? 1 : 0); i < completeLines.length; i++) {
+                        const line = completeLines[i].trim();
+                        if (line) {
+                            const values = parseCSVLine(line, delimiter);
+                            const selectedValues = selectedColumns.map(idx => values[idx] || '');
+                            outputParts.push(formatCSVLine(selectedValues) + '\n');
+                        }
+                    }
+                    
+                    isFirstChunk = false;
+                    offset += CHUNK_SIZE;
+                    
+                    // Update progress
+                    const progress = Math.min(100, Math.round((offset / currentFile.size) * 100));
+                    showProgress(progress);
+                }
+                
+                // Process last partial line if exists
+                if (partialLine.trim()) {
+                    const values = parseCSVLine(partialLine, delimiter);
+                    const selectedValues = selectedColumns.map(idx => values[idx] || '');
+                    outputParts.push(formatCSVLine(selectedValues) + '\n');
+                }
+                
+                // Create and download file
+                const blob = new Blob(outputParts, { type: 'text/csv' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = exportFileName;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                showStatus('Export completed successfully!');
+                setTimeout(hideStatus, 3000);
+                
+            } catch (error) {
+                showError('Error exporting file: ' + error.message);
+            } finally {
+                document.getElementById('exportBtn').disabled = false;
+                hideProgress();
+            }
+        }
+        
+        function formatCSVLine(values) {
+            return values.map(value => {
+                if (value == null) return '';
+                value = String(value);
+                if (value.includes(',') || value.includes('"') || value.includes('\n')) {
+                    return '"' + value.replace(/"/g, '""') + '"';
+                }
+                return value;
+            }).join(',');
+        }
+        
+        function resetFile() {
+            currentFile = null;
+            headers = [];
+            delimiter = ',';
+            fileData = [];
+            
+            fileInput.value = '';
+            document.getElementById('fileInfo').style.display = 'none';
+            document.getElementById('exportNameSection').style.display = 'none';
+            document.getElementById('previewSection').style.display = 'none';
+            document.getElementById('columnSelector').style.display = 'none';
+            document.getElementById('actionButtons').style.display = 'none';
+            
+            hideStatus();
+            hideError();
+            hideProgress();
+        }
+        
+        function showProgress(percent) {
+            document.getElementById('progressBar').style.display = 'block';
+            document.getElementById('progressFill').style.width = percent + '%';
+            document.getElementById('progressFill').textContent = percent + '%';
+        }
+        
+        function hideProgress() {
+            document.getElementById('progressBar').style.display = 'none';
+        }
+        
+        function showStatus(message) {
+            const statusEl = document.getElementById('statusMessage');
+            statusEl.textContent = message;
+            statusEl.style.display = 'block';
+        }
+        
+        function hideStatus() {
+            document.getElementById('statusMessage').style.display = 'none';
+        }
+        
+        function showError(message) {
+            const errorEl = document.getElementById('errorMessage');
+            errorEl.textContent = message;
+            errorEl.style.display = 'block';
+        }
+        
+        function hideError() {
+            document.getElementById('errorMessage').style.display = 'none';
+        }
+        
+        // Close modal when clicking outside of it
+        window.onclick = function(event) {
+            const modal = document.getElementById('presetModal');
+            if (event.target == modal) {
+                closePresetModal();
+            }
+        }
+        </script>
