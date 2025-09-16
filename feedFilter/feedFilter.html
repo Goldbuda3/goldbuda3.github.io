@@ -9,13 +9,14 @@
 <body>
     <div class="container">
         <h1>CSV/TSV File Converter</h1>
-        <p class="subtitle">Upload files up to 700 MB • Select specific columns • Export as CSV</p>
+        <p class="subtitle">Convert TSV to CSV • Upload files up to 700 MB • Select specific columns</p>
         
         <label for="fileInput" class="upload-area" id="uploadArea">
             <div class="upload-icon">📁</div>
             <p style="font-size: 1.2em; margin-bottom: 10px;">Drop your file here or click to browse</p>
-            <p style="color: #888; font-size: 0.9em;">Supports .csv and .tsv files</p>
-            <input type="file" id="fileInput" accept=".csv,.tsv,.txt" onchange="if(this.files[0]) handleFile(this.files[0])">
+            <p style="color: #888; font-size: 0.9em;">Supports CSV, TSV, and other delimited files</p>
+            <!-- <p style="color: #667; font-size: 0.85em; margin-top: 5px;">✨ TSV files will be automatically converted to CSV format</p> -->
+            <input type="file" id="fileInput" accept=".csv,.tsv,.txt,.tab,.dat" onchange="if(this.files[0]) handleFile(this.files[0])">
         </label>
 
         <div class="file-info" id="fileInfo">
@@ -80,6 +81,10 @@
 
         <div class="status-message" id="statusMessage"></div>
         <div class="error-message" id="errorMessage"></div>
+        
+        <div style="margin-top: 20px; padding: 10px; background: rgba(0,0,0,0.05); border-radius: 5px; font-size: 0.85em; color: #666; text-align: center;">
+            Having issues? Open browser console (F12) and run <code style="background: white; padding: 2px 5px; border-radius: 3px;">window.enableDebug()</code> for detailed diagnostics
+        </div>
     </div>
 
     <!-- Modal for saving/editing presets -->
