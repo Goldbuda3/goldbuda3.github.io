@@ -16,7 +16,6 @@ forms/                  Résumé PDF
 
 feedFilter/             CSV/TSV Feed Filter project
 hydroflask/             Hydro Flask: Colors of Kona project
-hydroflask.html         Redirect from the old Hydro Flask address
 
 CNAME                   Custom domain for GitHub Pages
 ```
