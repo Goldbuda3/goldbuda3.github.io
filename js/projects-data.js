@@ -31,15 +31,6 @@ const PROJECTS = [
     external: true
   },
   {
-    title: 'Game Catalog',
-    category: 'front-end',
-    stack: ['APIs', 'JavaScript', 'jQuery', 'Bootstrap'],
-    description: 'Browsable catalog of video games built against a public games API.',
-    image: null,
-    url: 'https://thegamecat-1e92e.web.app/',
-    external: true
-  },
-  {
     title: 'Hydro Flask: Colors of Kona',
     category: 'front-end',
     stack: ['Bootstrap 5', 'HTML/CSS'],
