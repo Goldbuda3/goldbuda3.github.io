@@ -43,9 +43,9 @@ const PROJECTS = [
     category: 'front-end',
     stack: ['Bootstrap 5', 'HTML/CSS'],
     description: 'Product-launch landing page mockup for a new Hydro Flask color line.',
-    image: 'Images/KonaMobile.png',
+    image: 'hydroflask/images/KonaMobile.png',
     imagePosition: 'center 70%',
-    url: 'hydroflask.html',
+    url: 'hydroflask/hydroflask.html',
     external: false
   },
   {
