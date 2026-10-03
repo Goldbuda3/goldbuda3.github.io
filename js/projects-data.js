@@ -21,12 +21,13 @@ const CATEGORIES = {
 //   initials       — override the auto-generated initials
 const PROJECTS = [
   {
-    title: 'Kool Journal',
-    category: 'full-stack',
-    stack: ['Express', 'PostgreSQL', 'Passport', 'PUG'],
-    description: 'Journaling app with user authentication and persistent entries.',
-    image: 'img/youtube_profile_image.png',
-    url: 'https://kool-journal.herokuapp.com/login',
+    title: 'Fantasy Football Dashboard',
+    category: 'sports',
+    stack: ['React', 'Vite', 'Python', 'SQLite', 'GitHub Actions'],
+    description: 'How every NFL defense holds up against QBs, RBs, WRs and TEs, with stats refreshed weekly.',
+    image: 'img/fantasy-football-dashboard.jpg',
+    imagePosition: 'left top',
+    url: 'https://joaquinvargas.me/fantasy-football-dashboard/',
     external: true
   },
   {
