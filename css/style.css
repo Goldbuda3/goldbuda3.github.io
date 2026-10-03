@@ -80,75 +80,70 @@ h6,
 }
 
 .item .item-wrap {
-  display: block;
-  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   overflow: hidden;
-}
-
-.item .item-wrap:after {
-  z-index: 2;
-  position: absolute;
-  content: "";
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.4);
-  visibility: hidden;
-  opacity: 0;
-  transition: .3s all ease-in-out;
-}
-
-.item .item-wrap img {
-  transition: .3s transform ease;
-  -webkit-transform: scale(1);
-  transform: scale(1);
-}
-
-.item .item-wrap > .work-info {
-  position: absolute;
-  top: 50%;
-  width: 100%;
-  text-align: center;
-  z-index: 3;
-  -webkit-transform: translateY(-50%);
-  transform: translateY(-50%);
-  color: #fff;
-  opacity: 0;
-  visibility: hidden;
-  margin-top: 20px;
-  transition: .3s all ease;
-}
-
-.item .item-wrap > .work-info h3 {
-  font-size: 20px;
-  margin-bottom: 0;
-}
-
-.item .item-wrap > .work-info span {
-  font-size: 14px;
-  text-transform: uppercase;
-  letter-spacing: .2rem;
+  border-radius: 6px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+  background: #fff;
+  text-decoration: none;
+  transition: .2s transform ease, .2s box-shadow ease;
 }
 
 .item .item-wrap:hover {
   text-decoration: none;
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
 }
 
-.item .item-wrap:hover img {
-  -webkit-transform: scale(1.05);
-  transform: scale(1.05);
+.item .item-wrap img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
 }
 
-.item .item-wrap:hover:after {
-  opacity: 1;
-  visibility: visible;
+.item-placeholder {
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 1rem;
+  background: #e9ecef;
+  color: #495057;
+  font-family: "Raleway", sans-serif;
+  font-weight: 700;
 }
 
-.item .item-wrap:hover .work-info {
-  margin-top: 0px;
-  opacity: 1;
-  visibility: visible;
+.item .item-wrap > .work-info {
+  flex: 1;
+  padding: 1rem 1.25rem 1.25rem;
+  color: #0d1e2d;
+  text-align: left;
+}
+
+.item .item-wrap > .work-info h3 {
+  font-size: 18px;
+  margin-bottom: .5rem;
+}
+
+.item .item-wrap > .work-info .stack-badges {
+  margin-bottom: .6rem;
+}
+
+.item .item-wrap > .work-info .stack-badge {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .05rem;
+  margin-right: .3rem;
+  margin-bottom: .3rem;
+}
+
+.item .item-wrap > .work-info p {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 0;
 }
 
 .testimonial-wrap {
