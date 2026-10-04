@@ -21,6 +21,15 @@ const CATEGORIES = {
 //   initials       — override the auto-generated initials
 const PROJECTS = [
   {
+    title: 'WNBA Fantasy Dashboard',
+    category: 'sports',
+    stack: ['JavaScript', 'Python', 'pandas', 'GitHub Actions'],
+    description: 'How every WNBA defense holds up against guards, forwards and centers, with custom fantasy scoring.',
+    image: null,
+    url: 'https://joaquinvargas.me/wnba-fantasy-dashboard/',
+    external: true
+  },
+  {
     title: 'Fantasy Football Dashboard',
     category: 'sports',
     stack: ['React', 'Vite', 'Python', 'SQLite', 'GitHub Actions'],
